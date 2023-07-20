@@ -13,6 +13,11 @@ __cc_find(Admesh)
 #__cc_find(tbb)
 __cc_find(Clipper2)
 
+__assert_target(clipper2)
+__assert_target(cereal)
+__assert_target(eigen)
+__assert_target(admesh)
+
 set(SRCS
 	#libslic3r_version.h
 	Slice3rBase/MultiPoint.cpp
@@ -397,10 +402,6 @@ if(WIN32)
     list(APPEND LIBS Psapi.lib)
 endif()
 
-if(SLIC3R_PROFILE)
-   target_link_libraries(libslic3r Shiny)
-endif()
-
 list(APPEND LIBS cxlog)
 #if(TARGET tbb)
 #	set(DEFS SLICE3R_USE_TBB)
@@ -410,10 +411,6 @@ set(ILIBS eigen clipper2 admesh boost_filesystem boost_nowide cereal)
 # glu-libtess  qhull clipper3r  libnest2d tbb 
 
 set(EXPORT_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR})
-
-#if (SLIC3R_PCH AND NOT SLIC3R_SYNTAXONLY)
-#    add_precompiled_header(libslic3r pchheader.hpp FORCEINCLUDE)
-#endif ()
 
 __add_real_target(Slice3rBase lib SOURCE ${SRCS}
 								LIB ${LIBS}
