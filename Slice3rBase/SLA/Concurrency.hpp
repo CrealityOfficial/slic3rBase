@@ -3,8 +3,8 @@
 
 // FIXME: Deprecated
 
-#include <libslic3r/Execution/ExecutionSeq.hpp>
-#include <libslic3r/Execution/ExecutionTBB.hpp>
+#include "Slice3rBase/Execution/ExecutionSeq.hpp"
+#include "Slice3rBase/Execution/ExecutionTBB.hpp"
 
 namespace Slic3r {
 namespace sla {

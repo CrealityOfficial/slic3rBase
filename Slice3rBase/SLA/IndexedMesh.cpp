@@ -1,13 +1,13 @@
 #include "IndexedMesh.hpp"
 #include "Concurrency.hpp"
 
-#include <libslic3r/AABBTreeIndirect.hpp>
-#include <libslic3r/TriangleMesh.hpp>
+#include <Slice3rBase/AABBTreeIndirect.hpp>
+#include <Slice3rBase/TriangleMesh.hpp>
 
 #include <numeric>
 
 #ifdef SLIC3R_HOLE_RAYCASTER
-#include <libslic3r/SLA/Hollowing.hpp>
+#include <Slice3rBase/SLA/Hollowing.hpp>
 #endif
 
 namespace Slic3r {

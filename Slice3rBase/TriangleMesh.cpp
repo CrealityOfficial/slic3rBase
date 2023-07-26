@@ -10,9 +10,12 @@
 #include "Execution/ExecutionSeq.hpp"
 #include "Utils.hpp"
 #include "Format/STL.hpp"
+
+#if 0
 #include <libqhullcpp/Qhull.h>
 #include <libqhullcpp/QhullFacetList.h>
 #include <libqhullcpp/QhullVertexSet.h>
+#endif 
 
 #include <cmath>
 #include <deque>
@@ -1121,6 +1124,7 @@ indexed_triangle_set its_convex_hull(const std::vector<Vec3f> &pts)
     std::vector<Vec3f>  dst_vertices;
     std::vector<Vec3i>  dst_facets;
 
+#if 0
     if (! pts.empty()) {
         // The qhull call:
         orgQhull::Qhull qhull;
@@ -1196,6 +1200,7 @@ indexed_triangle_set its_convex_hull(const std::vector<Vec3f> &pts)
             }
         }
     }
+#endif 
 
     return { std::move(dst_facets), std::move(dst_vertices) };
 }

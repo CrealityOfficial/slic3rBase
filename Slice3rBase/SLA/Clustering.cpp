@@ -1,8 +1,8 @@
 #include "Clustering.hpp"
 #include "boost/geometry/index/rtree.hpp"
 
-#include <libslic3r/SLA/SpatIndex.hpp>
-#include <libslic3r/SLA/BoostAdapter.hpp>
+#include <Slice3rBase/SLA/SpatIndex.hpp>
+#include <Slice3rBase/SLA/BoostAdapter.hpp>
 
 namespace Slic3r { namespace sla {
 

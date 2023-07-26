@@ -3,12 +3,12 @@
 
 #include <random>
 
-#include <libslic3r/SLA/SupportPoint.hpp>
-#include <libslic3r/SLA/IndexedMesh.hpp>
+#include <Slice3rBase/SLA/SupportPoint.hpp>
+#include <Slice3rBase/SLA/IndexedMesh.hpp>
 
-#include <libslic3r/BoundingBox.hpp>
-#include <libslic3r/ClipperUtils.hpp>
-#include <libslic3r/Point.hpp>
+#include <Slice3rBase/BoundingBox.hpp>
+#include <Slice3rBase/ClipperUtils.hpp>
+#include <Slice3rBase/Point.hpp>
 
 #include <boost/container/small_vector.hpp>
 

@@ -6,7 +6,7 @@
 #include <cstddef>
 #include <iterator>
 
-#include "libslic3r/libslic3r.h"
+#include "Slice3rBase/libslic3r.h"
 
 namespace Slic3r {
 

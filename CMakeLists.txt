@@ -10,13 +10,14 @@ __cc_find(Boost)
 __cc_find(Eigen)
 __cc_find(Cereal)
 __cc_find(Admesh)
-#__cc_find(tbb)
+__cc_find(tbb)
 __cc_find(Clipper2)
 
 __assert_target(clipper2)
 __assert_target(cereal)
 __assert_target(eigen)
 __assert_target(admesh)
+__assert_target(tbb)
 
 set(SRCS
 	#libslic3r_version.h
@@ -277,8 +278,8 @@ set(SRCS
     #Technologies.hpp
     #Tesselate.cpp
     #Tesselate.hpp
-    #TriangleMesh.cpp
-    #TriangleMesh.hpp
+    Slice3rBase/TriangleMesh.cpp
+    Slice3rBase/TriangleMesh.hpp
     #TriangleMeshSlicer.cpp
     #TriangleMeshSlicer.hpp
     #MeshSplitImpl.hpp
@@ -299,34 +300,34 @@ set(SRCS
     #VariableWidth.hpp
     #Zipper.hpp
     #Zipper.cpp
-    #MinAreaBoundingBox.hpp
-    #MinAreaBoundingBox.cpp
+    #Slice3rBase/MinAreaBoundingBox.hpp
+    #Slice3rBase/MinAreaBoundingBox.cpp
     #miniz_extension.hpp
     #miniz_extension.cpp
     #MarchingSquares.hpp
-    #Execution/Execution.hpp
-    #Execution/ExecutionSeq.hpp
-    #Execution/ExecutionTBB.hpp
+    Slice3rBase/Execution/Execution.hpp
+    Slice3rBase/Execution/ExecutionSeq.hpp
+    Slice3rBase/Execution/ExecutionTBB.hpp
     #Optimize/Optimizer.hpp
     #Optimize/NLoptOptimizer.hpp
     #Optimize/BruteforceOptimizer.hpp
-    #SLA/Pad.hpp
-    #SLA/Pad.cpp
-    #SLA/SupportTreeBuilder.hpp
-    #SLA/SupportTreeMesher.hpp
-    #SLA/SupportTreeMesher.cpp
-    #SLA/SupportTreeBuildsteps.hpp
-    #SLA/SupportTreeBuildsteps.cpp
-    #SLA/SupportTreeBuilder.cpp
-    #SLA/Concurrency.hpp
+    #Slice3rBase/SLA/Pad.hpp
+    #Slice3rBase/SLA/Pad.cpp
+    #Slice3rBase/SLA/SupportTreeBuilder.hpp
+    #Slice3rBase/SLA/SupportTreeMesher.hpp
+    #Slice3rBase/SLA/SupportTreeMesher.cpp
+    #Slice3rBase/SLA/SupportTreeBuildsteps.hpp
+    #Slice3rBase/SLA/SupportTreeBuildsteps.cpp
+    #Slice3rBase/SLA/SupportTreeBuilder.cpp
+    Slice3rBase/SLA/Concurrency.hpp
     #SLA/SupportTree.hpp
     #SLA/SupportTree.cpp
 #    SLA/SupportTreeIGL.cpp
     #SLA/Rotfinder.hpp
     #SLA/Rotfinder.cpp
-    #SLA/BoostAdapter.hpp
-    #SLA/SpatIndex.hpp
-    #SLA/SpatIndex.cpp
+    Slice3rBase/SLA/BoostAdapter.hpp
+    Slice3rBase/SLA/SpatIndex.hpp
+    Slice3rBase/SLA/SpatIndex.cpp
     #SLA/RasterBase.hpp
     #SLA/RasterBase.cpp
     #SLA/AGGRaster.hpp
@@ -336,15 +337,15 @@ set(SRCS
     #SLA/ConcaveHull.cpp
     #SLA/Hollowing.hpp
     #SLA/Hollowing.cpp
-    #SLA/JobController.hpp
-    #SLA/SupportPoint.hpp
-    #SLA/SupportPointGenerator.hpp
-    #SLA/SupportPointGenerator.cpp
-    #SLA/IndexedMesh.hpp
-    #SLA/IndexedMesh.cpp
-    #SLA/Clustering.hpp
-    #SLA/Clustering.cpp
-    #SLA/ReprojectPointsOnMesh.hpp
+    Slice3rBase/SLA/JobController.hpp
+    Slice3rBase/SLA/SupportPoint.hpp
+    Slice3rBase/SLA/SupportPointGenerator.hpp
+    Slice3rBase/SLA/SupportPointGenerator.cpp
+    Slice3rBase/SLA/IndexedMesh.hpp
+    Slice3rBase/SLA/IndexedMesh.cpp
+    Slice3rBase/SLA/Clustering.hpp
+    Slice3rBase/SLA/Clustering.cpp
+    #Slice3rBase/SLA/ReprojectPointsOnMesh.hpp
     #Arachne/BeadingStrategy/BeadingStrategy.hpp
     #Arachne/BeadingStrategy/BeadingStrategy.cpp
     #Arachne/BeadingStrategy/BeadingStrategyFactory.hpp
@@ -402,12 +403,12 @@ if(WIN32)
     list(APPEND LIBS Psapi.lib)
 endif()
 
-list(APPEND LIBS cxlog)
-#if(TARGET tbb)
-#	set(DEFS SLICE3R_USE_TBB)
-#endif()
+list(APPEND LIBS cxlog )
 set(ILIBS eigen clipper2 admesh boost_filesystem boost_nowide cereal)
-
+if(TARGET tbb)
+	set(DEFS SLICE3R_USE_TBB)
+	list(APPEND ILIBS tbb)
+endif()
 # glu-libtess  qhull clipper3r  libnest2d tbb 
 
 set(EXPORT_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR})

@@ -4,7 +4,7 @@
 #include <memory>
 #include <vector>
 
-#include <libslic3r/Point.hpp>
+#include <Slice3rBase/Point.hpp>
 
 // There is an implementation of a hole-aware raycaster that was eventually
 // not used in production version. It is now hidden under following define
@@ -12,7 +12,7 @@
 // #define SLIC3R_HOLE_RAYCASTER
 
 #ifdef SLIC3R_HOLE_RAYCASTER
-  #include "libslic3r/SLA/Hollowing.hpp"
+  #include "Slice3rBase/SLA/Hollowing.hpp"
 #endif
 
 struct indexed_triangle_set;

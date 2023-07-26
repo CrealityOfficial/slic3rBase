@@ -1,8 +1,8 @@
 #ifndef SLA_BOOSTADAPTER_HPP
 #define SLA_BOOSTADAPTER_HPP
 
-#include <libslic3r/Point.hpp>
-#include <libslic3r/BoundingBox.hpp>
+#include "Slice3rBase/Point.hpp"
+#include "Slice3rBase/BoundingBox.hpp"
 
 #include <boost/geometry.hpp>
 

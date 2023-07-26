@@ -7,7 +7,7 @@
 
 #include <Eigen/Geometry>
 
-#include <libslic3r/BoundingBox.hpp>
+#include "Slice3rBase/BoundingBox.hpp"
 
 namespace Slic3r {
 namespace sla {

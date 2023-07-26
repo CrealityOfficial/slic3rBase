@@ -1,7 +1,7 @@
 #ifndef MINAREABOUNDINGBOX_HPP
 #define MINAREABOUNDINGBOX_HPP
 
-#include "libslic3r/Point.hpp"
+#include "Slice3rBase/Point.hpp"
 
 namespace Slic3r {
 

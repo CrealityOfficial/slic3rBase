@@ -3,8 +3,8 @@
 
 #include <vector>
 
-#include <libslic3r/Point.hpp>
-#include <libslic3r/SLA/SpatIndex.hpp>
+#include "Slice3rBase/Point.hpp"
+#include "Slice3rBase/SLA/SpatIndex.hpp"
 
 namespace Slic3r { namespace sla {
 
