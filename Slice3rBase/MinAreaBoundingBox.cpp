@@ -14,8 +14,10 @@
 #include <boost/multiprecision/integer.hpp>
 #endif
 
+#if 0
 #include <libnest2d/backends/libslic3r/geometries.hpp>
 #include <libnest2d/utils/rotcalipers.hpp>
+#endif 
 
 namespace Slic3r {
 
@@ -28,6 +30,7 @@ using Rational = boost::rational<boost::multiprecision::int128_t>;
 using Rational = boost::rational<__int128>;
 #endif
 
+#if 0
 template<class P>
 libnest2d::RotatedBox<Point, Unit> minAreaBoundigBox_(
     const P &p, MinAreaBoundigBox::PolygonLevel lvl)
@@ -41,31 +44,33 @@ libnest2d::RotatedBox<Point, Unit> minAreaBoundigBox_(
     return libnest2d::minAreaBoundingBox<P, Unit, Rational>(chull);
 }
 
+#endif 
+
 MinAreaBoundigBox::MinAreaBoundigBox(const Polygon &p, PolygonLevel pc)
 {
-    libnest2d::RotatedBox<Point, Unit> box = minAreaBoundigBox_(p, pc);
-
-    m_right  = libnest2d::cast<long double>(box.right_extent());
-    m_bottom = libnest2d::cast<long double>(box.bottom_extent());
-    m_axis   = box.axis();
+    //libnest2d::RotatedBox<Point, Unit> box = minAreaBoundigBox_(p, pc);
+    //
+    //m_right  = libnest2d::cast<long double>(box.right_extent());
+    //m_bottom = libnest2d::cast<long double>(box.bottom_extent());
+    //m_axis   = box.axis();
 }
 
 MinAreaBoundigBox::MinAreaBoundigBox(const ExPolygon &p, PolygonLevel pc)
 {
-    libnest2d::RotatedBox<Point, Unit> box = minAreaBoundigBox_(p, pc);
-
-    m_right  = libnest2d::cast<long double>(box.right_extent());
-    m_bottom = libnest2d::cast<long double>(box.bottom_extent());
-    m_axis   = box.axis();
+    //libnest2d::RotatedBox<Point, Unit> box = minAreaBoundigBox_(p, pc);
+    //
+    //m_right  = libnest2d::cast<long double>(box.right_extent());
+    //m_bottom = libnest2d::cast<long double>(box.bottom_extent());
+    //m_axis   = box.axis();
 }
 
 MinAreaBoundigBox::MinAreaBoundigBox(const Points &pts, PolygonLevel pc)
 {
-    libnest2d::RotatedBox<Point, Unit> box = minAreaBoundigBox_(pts, pc);
-
-    m_right  = libnest2d::cast<long double>(box.right_extent());
-    m_bottom = libnest2d::cast<long double>(box.bottom_extent());
-    m_axis   = box.axis();
+    //libnest2d::RotatedBox<Point, Unit> box = minAreaBoundigBox_(pts, pc);
+    //
+    //m_right  = libnest2d::cast<long double>(box.right_extent());
+    //m_bottom = libnest2d::cast<long double>(box.bottom_extent());
+    //m_axis   = box.axis();
 }
 
 double MinAreaBoundigBox::angle_to_X() const
@@ -78,29 +83,32 @@ double MinAreaBoundigBox::angle_to_X() const
 
 long double MinAreaBoundigBox::width() const
 {
-    return std::abs(m_bottom) /
-           std::sqrt(libnest2d::pl::magnsq<Point, long double>(m_axis));
+    //return std::abs(m_bottom) /
+    //       std::sqrt(libnest2d::pl::magnsq<Point, long double>(m_axis));
+    return 0.0;
 }
 
 long double MinAreaBoundigBox::height() const
 {
-    return std::abs(m_right) /
-           std::sqrt(libnest2d::pl::magnsq<Point, long double>(m_axis));
+    //return std::abs(m_right) /
+    //       std::sqrt(libnest2d::pl::magnsq<Point, long double>(m_axis));
+    return 0.0;
 }
 
 long double MinAreaBoundigBox::area() const
 {
-    long double asq = libnest2d::pl::magnsq<Point, long double>(m_axis);
-    return m_bottom * m_right / asq;
+    //long double asq = libnest2d::pl::magnsq<Point, long double>(m_axis);
+    //return m_bottom * m_right / asq;
+    return 0.0;
 }
 
 void remove_collinear_points(Polygon &p)
 {
-    p = libnest2d::removeCollinearPoints<Polygon>(p, Unit(0));
+    //p = libnest2d::removeCollinearPoints<Polygon>(p, Unit(0));
 }
 
 void remove_collinear_points(ExPolygon &p)
 {
-    p = libnest2d::removeCollinearPoints<ExPolygon>(p, Unit(0));
+    //p = libnest2d::removeCollinearPoints<ExPolygon>(p, Unit(0));
 }
 } // namespace Slic3r

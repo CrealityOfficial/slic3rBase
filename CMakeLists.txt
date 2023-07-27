@@ -295,13 +295,13 @@ set(SRCS
     #TriangleSelector.hpp
     #TriangleSetSampling.cpp
     #TriangleSetSampling.hpp
-    #MTUtils.hpp
+    Slice3rBase/MTUtils.hpp
     #VariableWidth.cpp
     #VariableWidth.hpp
     #Zipper.hpp
     #Zipper.cpp
-    #Slice3rBase/MinAreaBoundingBox.hpp
-    #Slice3rBase/MinAreaBoundingBox.cpp
+    Slice3rBase/MinAreaBoundingBox.hpp
+    Slice3rBase/MinAreaBoundingBox.cpp
     #miniz_extension.hpp
     #miniz_extension.cpp
     #MarchingSquares.hpp
