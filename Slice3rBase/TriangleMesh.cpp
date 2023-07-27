@@ -25,7 +25,6 @@
 #include <algorithm>
 #include <type_traits>
 
-#include <boost/log/trivial.hpp>
 #include <boost/nowide/cstdio.hpp>
 #include <boost/predef/other/endian.h>
 
@@ -84,12 +83,9 @@ static void trianglemesh_repair_on_import(stl_file &stl)
     if (stl.stats.number_of_facets == 0)
         return;
 
-    BOOST_LOG_TRIVIAL(debug) << "TriangleMesh::repair() started";
+    LOGI("TriangleMesh::repair() started");
 
     // checking exact
-#ifdef SLIC3R_TRACE_REPAIR
-    BOOST_LOG_TRIVIAL(trace) << "\tstl_check_faces_exact";
-#endif /* SLIC3R_TRACE_REPAIR */
     assert(stl_validate(&stl));
     stl_check_facets_exact(&stl);
     assert(stl_validate(&stl));
@@ -109,7 +105,7 @@ static void trianglemesh_repair_on_import(stl_file &stl)
                 // Still not a manifold, some triangles have unconnected edges.
                 //printf("Checking nearby. Tolerance= %f Iteration=%d of %d...", tolerance, i + 1, iterations);
 #ifdef SLIC3R_TRACE_REPAIR
-                BOOST_LOG_TRIVIAL(trace) << "\tstl_check_faces_nearby";
+                LOGI("tstl_check_faces_nearby");
 #endif /* SLIC3R_TRACE_REPAIR */
                 stl_check_facets_nearby(&stl, tolerance);
                 //printf("  Fixed %d edges.\n", stl.stats.edges_fixed - last_edges_fixed);
@@ -125,7 +121,7 @@ static void trianglemesh_repair_on_import(stl_file &stl)
     // remove_unconnected
     if (stl.stats.connected_facets_3_edge < (int)stl.stats.number_of_facets) {
 #ifdef SLIC3R_TRACE_REPAIR
-        BOOST_LOG_TRIVIAL(trace) << "\tstl_remove_unconnected_facets";
+        LOGI("tstl_remove_unconnected_facets");
 #endif /* SLIC3R_TRACE_REPAIR */
         stl_remove_unconnected_facets(&stl);
         assert(stl_validate(&stl));
@@ -137,7 +133,7 @@ static void trianglemesh_repair_on_import(stl_file &stl)
     // Rather let the slicing algorithm close gaps in 2D slices.
     if (stl.stats.connected_facets_3_edge < stl.stats.number_of_facets) {
 #ifdef SLIC3R_TRACE_REPAIR
-        BOOST_LOG_TRIVIAL(trace) << "\tstl_fill_holes";
+        LOGI("tstl_fill_holes");
 #endif /* SLIC3R_TRACE_REPAIR */
         stl_fill_holes(&stl);
         stl_clear_error(&stl);
@@ -146,21 +142,21 @@ static void trianglemesh_repair_on_import(stl_file &stl)
 
     // normal_directions
 #ifdef SLIC3R_TRACE_REPAIR
-    BOOST_LOG_TRIVIAL(trace) << "\tstl_fix_normal_directions";
+    LOGI("tstl_fix_normal_directions");
 #endif /* SLIC3R_TRACE_REPAIR */
     stl_fix_normal_directions(&stl);
     assert(stl_validate(&stl));
 
     // normal_values
 #ifdef SLIC3R_TRACE_REPAIR
-    BOOST_LOG_TRIVIAL(trace) << "\tstl_fix_normal_values";
+    LOGI("tstl_fix_normal_values");
 #endif /* SLIC3R_TRACE_REPAIR */
     stl_fix_normal_values(&stl);
     assert(stl_validate(&stl));
     
     // always calculate the volume and reverse all normals if volume is negative
 #ifdef SLIC3R_TRACE_REPAIR
-    BOOST_LOG_TRIVIAL(trace) << "\tstl_calculate_volume";
+    LOGI("tstl_calculate_volume");
 #endif /* SLIC3R_TRACE_REPAIR */
     // If the volume is negative, all the facets are flipped and added to stats.facets_reversed.
     stl_calculate_volume(&stl);
@@ -168,7 +164,7 @@ static void trianglemesh_repair_on_import(stl_file &stl)
     
     // neighbors
 #ifdef SLIC3R_TRACE_REPAIR
-    BOOST_LOG_TRIVIAL(trace) << "\tstl_verify_neighbors";
+    LOGI("tstl_verify_neighbors");
 #endif /* SLIC3R_TRACE_REPAIR */
     stl_verify_neighbors(&stl);
     assert(stl_validate(&stl));
@@ -177,7 +173,7 @@ static void trianglemesh_repair_on_import(stl_file &stl)
     if (auto nr_degenerated = stl.stats.degenerate_facets; stl.stats.number_of_facets > 0 && nr_degenerated > 0)
         stl_check_facets_exact(&stl);
 
-    BOOST_LOG_TRIVIAL(debug) << "TriangleMesh::repair() finished";
+    LOGI("TriangleMesh::repair() finished");
 }
 
 bool TriangleMesh::from_stl(stl_file& stl, bool repair)
@@ -211,34 +207,11 @@ bool TriangleMesh::from_stl(stl_file& stl, bool repair)
     return true;
 }
 
-bool TriangleMesh::ReadSTLFile(const char* input_file, bool repair, ImportstlProgressFn stlFn)
-{ 
-    stl_file stl;
-    if (! stl_open(&stl, input_file, stlFn))
-        return false;
-    return from_stl(stl, repair);
-}
-
-bool TriangleMesh::write_ascii(const char* output_file)
-{ 
-    return its_write_stl_ascii(output_file, "", this->its);
-}
-
-bool TriangleMesh::write_binary(const char* output_file)
-{ 
-    return its_write_stl_binary(output_file, "", this->its);
-}
-
 float TriangleMesh::volume()
 {
     if (m_stats.volume == -1)
         m_stats.volume = its_volume(this->its);
     return m_stats.volume;
-}
-
-void TriangleMesh::WriteOBJFile(const char* output_file) const
-{
-    its_write_obj(this->its, output_file);
 }
 
 void TriangleMesh::scale(float factor)
@@ -786,48 +759,6 @@ int its_compactify_vertices(indexed_triangle_set &its, bool shrink_to_fit)
     return removed;
 }
 
-bool its_store_triangle(const indexed_triangle_set &its,
-                        const char *                obj_filename,
-                        size_t                      triangle_index)
-{
-    if (its.indices.size() <= triangle_index) return false;
-    Vec3i                t = its.indices[triangle_index];
-    indexed_triangle_set its2;
-    its2.indices  = {{0, 1, 2}};
-    its2.vertices = {its.vertices[t[0]], its.vertices[t[1]],
-                     its.vertices[t[2]]};
-    return its_write_obj(its2, obj_filename);
-}
-
-bool its_store_triangles(const indexed_triangle_set &its,
-                         const char *                obj_filename,
-                         const std::vector<size_t> & triangles)
-{
-    indexed_triangle_set its2;
-    its2.vertices.reserve(triangles.size() * 3);
-    its2.indices.reserve(triangles.size());
-    std::map<size_t, size_t> vertex_map;
-    for (auto ti : triangles) {
-        if (its.indices.size() <= ti) return false;
-        Vec3i t = its.indices[ti];
-        Vec3i new_t;
-        for (size_t i = 0; i < 3; ++i) {
-            size_t vi = t[i];
-            auto   it = vertex_map.find(vi);
-            if (it != vertex_map.end()) {
-                new_t[i] = it->second;
-                continue;
-            }
-            size_t new_vi = its2.vertices.size();
-            its2.vertices.push_back(its.vertices[vi]);
-            vertex_map[vi] = new_vi;
-            new_t[i]       = new_vi;
-        }
-        its2.indices.push_back(new_t);
-    }
-    return its_write_obj(its2, obj_filename);
-}
-
 void its_shrink_to_fit(indexed_triangle_set &its)
 {
     its.indices.shrink_to_fit();
@@ -1144,7 +1075,7 @@ indexed_triangle_set its_convex_hull(const std::vector<Vec3f> &pts)
             qhull.runQhull("", 3, (int)src_vertices.size() / 3, src_vertices.data(), "Qt");
     #endif
         } catch (...) {
-            BOOST_LOG_TRIVIAL(error) << "its_convex_hull: Unable to create convex hull";
+            LOGI("its_convex_hull: Unable to create convex hull");
             return {};
         }
 
@@ -1379,7 +1310,7 @@ bool its_write_stl_ascii(const char *file, const char *label, const std::vector<
 {
     FILE *fp = boost::nowide::fopen(file, "w");
     if (fp == nullptr) {
-        BOOST_LOG_TRIVIAL(error) << "its_write_stl_ascii: Couldn't open " << file << " for writing";
+        LOGW("its_write_stl_ascii: Couldn't open [%s] for writing.", file);
         return false;
     }
 
@@ -1406,7 +1337,7 @@ bool its_write_stl_binary(const char *file, const char *label, const std::vector
 {
     FILE *fp = boost::nowide::fopen(file, "wb");
     if (fp == nullptr) {
-        BOOST_LOG_TRIVIAL(error) << "its_write_stl_binary: Couldn't open " << file << " for writing";
+        LOGW("its_write_stl_binary: Couldn't open [%s] for writing", file);
         return false;
     }
 

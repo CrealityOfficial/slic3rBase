@@ -2,7 +2,7 @@
 #define slic3r_TriangleMesh_hpp_
 
 #include "libslic3r.h"
-#include "stl.h"//#include "../admesh/stl.h"
+#include "stl.h"
 #include <functional>
 #include <vector>
 #include "BoundingBox.hpp"
@@ -94,11 +94,7 @@ public:
     explicit TriangleMesh(indexed_triangle_set &&M, const RepairedMeshErrors& repaired_errors = RepairedMeshErrors());
     void clear() { this->its.clear(); this->m_stats.clear(); }
     bool from_stl(stl_file& stl, bool repair = true);
-    bool ReadSTLFile(const char* input_file, bool repair = true, ImportstlProgressFn stlFn = nullptr);
-    bool write_ascii(const char* output_file);
-    bool write_binary(const char* output_file);
     float volume();
-    void WriteOBJFile(const char* output_file) const;
     void scale(float factor);
     void scale(const Vec3f &versor);
     void translate(float x, float y, float z);
@@ -213,10 +209,6 @@ int its_remove_degenerate_faces(indexed_triangle_set &its, bool shrink_to_fit = 
 
 // Remove vertices, which none of the faces references. Return number of freed vertices.
 int its_compactify_vertices(indexed_triangle_set &its, bool shrink_to_fit = true);
-
-// store part of index triangle set
-bool its_store_triangle(const indexed_triangle_set &its, const char *obj_filename, size_t triangle_index);
-bool its_store_triangles(const indexed_triangle_set &its, const char *obj_filename, const std::vector<size_t>& triangles);
 
 std::vector<indexed_triangle_set> its_split(const indexed_triangle_set &its);
 std::vector<indexed_triangle_set> its_split(const indexed_triangle_set &its, std::vector<Vec3i> &face_neighbors);

@@ -1,10 +1,11 @@
 #include "Circle.hpp"
 
-#include "../Polygon.hpp"
+#include "Slice3rBase/Polygon.hpp"
 
 #include <numeric>
 #include <random>
-#include <boost/log/trivial.hpp>
+
+#include "ccglobal/log.h"
 
 namespace Slic3r { namespace Geometry {
 
@@ -71,7 +72,7 @@ Vec2d circle_center_taubin_newton(const Vec2ds::const_iterator& input_begin, con
         const double yold {ynew};
         ynew = C0 + xnew * (C1 + xnew*(C2 + xnew * C3));
         if (std::abs(ynew) > std::abs(yold)) {
-			BOOST_LOG_TRIVIAL(error) << "Geometry: Fit is going in the wrong direction.\n";
+			LOGE("Geometry: Fit is going in the wrong direction.");
             return Vec2d(std::nan(""), std::nan(""));
         }
         const double Dy {C1 + xnew*(C22 + xnew*C33)};

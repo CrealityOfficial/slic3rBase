@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "Point.hpp"
+#include "Slice3rBase/Point.hpp"
 
 namespace Slic3r {
 

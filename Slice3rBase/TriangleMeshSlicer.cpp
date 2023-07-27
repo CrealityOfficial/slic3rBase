@@ -14,9 +14,8 @@
 #include <mutex>
 #include <utility>
 
-#include <boost/log/trivial.hpp>
-
 #include <tbb/parallel_for.h>
+#include "ccglobal/log.h"
 
 #ifndef NDEBUG
 //    #define EXPENSIVE_DEBUG_CHECKS
@@ -1494,7 +1493,7 @@ static std::vector<Polygons> make_slab_loops(
                         assert(! loops.empty());
                         assert(open_polylines.empty());
                         if (! open_polylines.empty())
-                            BOOST_LOG_TRIVIAL(trace) << "make_slab_loops - chaining failed. #" << open_polylines.size() << " open polylines";
+                            LOGI("make_slab_loops - chaining failed. # [%d] open polylines.", (int)open_polylines.size());
                     }
                 }
             }
@@ -1579,7 +1578,7 @@ static ExPolygons make_expolygons_simple(std::vector<IntersectionLine> &lines)
     return slices;
 }
 
-static void make_expolygons(const Polygons &loops, const float closing_radius, const float extra_offset, ClipperLib::PolyFillType fill_type, ExPolygons* slices)
+static void make_expolygons(const Polygons &loops, const float closing_radius, const float extra_offset, Clipper3r::PolyFillType fill_type, ExPolygons* slices)
 {
     /*
         Input loops are not suitable for evenodd nor nonzero fill types, as we might get
@@ -1712,7 +1711,7 @@ std::vector<Polygons> slice_mesh(
     const MeshSlicingParams          &params,
     std::function<void()>             throw_on_cancel)
 {
-    BOOST_LOG_TRIVIAL(debug) << "slice_mesh to polygons";
+    LOGD("slice_mesh to polygons");
        
     std::vector<IntersectionLines> lines;
 
@@ -1860,7 +1859,6 @@ std::vector<ExPolygons> slice_mesh_ex(
         layers_p = slice_mesh(mesh, zs, slicing_params, throw_on_cancel);
     }
     
-//    BOOST_LOG_TRIVIAL(debug) << "slice_mesh make_expolygons in parallel - start";
     std::vector<ExPolygons> layers(layers_p.size(), ExPolygons{});
     tbb::parallel_for(
         tbb::blocked_range<size_t>(0, layers_p.size()),
@@ -1873,8 +1871,8 @@ std::vector<ExPolygons> slice_mesh_ex(
                 const auto this_mode = layer_id < params.slicing_mode_normal_below_layer ? params.mode_below : params.mode;
                 Slic3r::make_expolygons(
                     layers_p[layer_id], params.closing_radius, params.extra_offset,
-                    this_mode == MeshSlicingParams::SlicingMode::EvenOdd ? ClipperLib::pftEvenOdd : 
-                    this_mode == MeshSlicingParams::SlicingMode::PositiveLargestContour ? ClipperLib::pftPositive : ClipperLib::pftNonZero,
+                    this_mode == MeshSlicingParams::SlicingMode::EvenOdd ? Clipper3r::pftEvenOdd : 
+                    this_mode == MeshSlicingParams::SlicingMode::PositiveLargestContour ? Clipper3r::pftPositive : Clipper3r::pftNonZero,
                     &expolygons);
                 //FIXME simplify
                 if (this_mode == MeshSlicingParams::SlicingMode::PositiveLargestContour)
@@ -1888,7 +1886,6 @@ std::vector<ExPolygons> slice_mesh_ex(
                 }
             }
         });
-//    BOOST_LOG_TRIVIAL(debug) << "slice_mesh make_expolygons in parallel - end";
 
     return layers;
 }
@@ -1908,7 +1905,7 @@ void slice_mesh_slabs(
     std::vector<Polygons>            *out_bottom,
     std::function<void()>             throw_on_cancel)
 {
-    BOOST_LOG_TRIVIAL(debug) << "slice_mesh_slabs to polygons";
+    LOGI("slice_mesh_slabs to polygons");
 
 #ifdef EXPENSIVE_DEBUG_CHECKS
     {
@@ -2134,7 +2131,7 @@ void cut_mesh(const indexed_triangle_set& mesh, float z, indexed_triangle_set* u
     if (upper == nullptr && lower == nullptr)
         return;
 
-    BOOST_LOG_TRIVIAL(trace) << "cut_mesh - slicing object";
+    LOGI("cut_mesh - slicing object");
 
     if (upper) {
         upper->clear();
@@ -2324,7 +2321,7 @@ void cut_mesh
     if (upper == nullptr && lower == nullptr)
         return;
 
-    BOOST_LOG_TRIVIAL(trace) << "cut_mesh - slicing object";
+    LOGI("cut_mesh - slicing object");
 
     Vec3d plane_normal = calc_plane_normal(plane_points);
     if (std::abs(plane_normal(0)) < EPSILON && std::abs(plane_normal(1)) < EPSILON) {

@@ -12,6 +12,7 @@
 #include <boost/filesystem/path.hpp>
 ///#include <openssl/md5.h>
 
+#include "ccglobal/log.h"
 #include "libslic3r.h"
 
 //define CLI errors

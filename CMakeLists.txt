@@ -159,12 +159,12 @@ set(SRCS
     #GCodeWriter.hpp
     Slice3rBase/Geometry.cpp
     Slice3rBase/Geometry.hpp
-    #Geometry/Bicubic.hpp
-    #Geometry/Circle.cpp
-    #Geometry/Circle.hpp
-    #Geometry/ConvexHull.cpp
-    #Geometry/ConvexHull.hpp
-    #Geometry/Curves.hpp
+    Slice3rBase/Geometry/Bicubic.hpp
+    Slice3rBase/Geometry/Circle.cpp
+    Slice3rBase/Geometry/Circle.hpp
+    Slice3rBase/Geometry/ConvexHull.cpp
+    Slice3rBase/Geometry/ConvexHull.hpp
+    Slice3rBase/Geometry/Curves.hpp
     Slice3rBase/Geometry/MedialAxis.cpp
     Slice3rBase/Geometry/MedialAxis.hpp
     #Geometry/Voronoi.hpp
@@ -275,13 +275,13 @@ set(SRCS
     #SurfaceCollection.hpp
     #SVG.cpp
     #SVG.hpp
-    #Technologies.hpp
-    #Tesselate.cpp
-    #Tesselate.hpp
+    Slice3rBase/Technologies.hpp
+    Slice3rBase/Tesselate.cpp
+    Slice3rBase/Tesselate.hpp
     Slice3rBase/TriangleMesh.cpp
     Slice3rBase/TriangleMesh.hpp
-    #TriangleMeshSlicer.cpp
-    #TriangleMeshSlicer.hpp
+    Slice3rBase/TriangleMeshSlicer.cpp
+    Slice3rBase/TriangleMeshSlicer.hpp
     #MeshSplitImpl.hpp
     #TriangulateWall.hpp
     #TriangulateWall.cpp
@@ -399,14 +399,16 @@ set(SRCS
 	Slice3rBase/overhangquality/overhanghead.hpp
 )
 
+set(LIBS cxlog)
 if(WIN32)
     list(APPEND LIBS Psapi.lib)
 endif()
 
-list(APPEND LIBS cxlog )
 set(ILIBS eigen clipper2 admesh boost_filesystem boost_nowide cereal)
+set(DEFS BOOST_ALL_NO_LIB)
+
 if(TARGET tbb)
-	set(DEFS SLICE3R_USE_TBB)
+	list(APPEND DEFS SLICE3R_USE_TBB)
 	list(APPEND ILIBS tbb)
 endif()
 # glu-libtess  qhull clipper3r  libnest2d tbb 

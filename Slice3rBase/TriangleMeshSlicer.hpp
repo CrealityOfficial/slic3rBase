@@ -3,8 +3,8 @@
 
 #include <functional>
 #include <vector>
-#include "Polygon.hpp"
-#include "ExPolygon.hpp"
+#include "Slice3rBase/Polygon.hpp"
+#include "Slice3rBase/ExPolygon.hpp"
 
 namespace Slic3r {
 

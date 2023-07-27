@@ -4,7 +4,7 @@
 #include <memory>
 #include <exception>
 
-#include <libslic3r/TriangleMesh.hpp>
+#include <Slice3rBase/TriangleMesh.hpp>
 #include <Eigen/Geometry>
 
 namespace Slic3r {

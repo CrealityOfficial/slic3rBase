@@ -1,7 +1,7 @@
 #ifndef slic3r_Geometry_Circle_hpp_
 #define slic3r_Geometry_Circle_hpp_
 
-#include "../Point.hpp"
+#include "Slice3rBase/Point.hpp"
 
 #include <Eigen/Geometry>
 

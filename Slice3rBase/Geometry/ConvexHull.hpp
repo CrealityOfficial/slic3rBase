@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "../Polygon.hpp"
+#include "Slice3rBase/Polygon.hpp"
 
 namespace Slic3r {
 

@@ -1,7 +1,7 @@
-#include "libslic3r.h"
+#include "Slice3rBase/libslic3r.h"
 #include "ConvexHull.hpp"
-#include "BoundingBox.hpp"
-#include "../Geometry.hpp"
+#include "Slice3rBase/BoundingBox.hpp"
+#include "Slice3rBase/Geometry.hpp"
 
 #include <boost/multiprecision/integer.hpp>
 
