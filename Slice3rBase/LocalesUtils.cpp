@@ -2,6 +2,11 @@
 
 #ifdef _WIN32
     #include <charconv>
+#else
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <cstring>
 #endif
 #include <stdexcept>
 
