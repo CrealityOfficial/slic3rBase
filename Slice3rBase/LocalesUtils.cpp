@@ -4,6 +4,7 @@
     #include <charconv>
 #endif
 #include <stdexcept>
+#include <sstream>
 
 #include <Slice3rBase/fast_float/fast_float.h>
 
