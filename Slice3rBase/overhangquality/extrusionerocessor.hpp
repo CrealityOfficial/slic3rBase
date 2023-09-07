@@ -105,6 +105,8 @@ std::vector<ExtendedPoint> estimate_points_properties(const std::vector<P>      
     float              boundary_offset = PREV_LAYER_BOUNDARY_OFFSET ? 0.5 * flow_width : 0.0f;
     CurvatureEstimator cestim;
     auto maybe_unscale = [](const P &p) { return SCALED_INPUT ? unscaled(p) : p.template cast<double>(); };
+    float check_min_line_len = 25 * flow_width;
+    float min_bridge_len = 10 * flow_width;
 
     std::vector<ExtendedPoint> points;
     points.reserve(input_points.size() * (ADD_INTERSECTIONS ? 1.5 : 1));
@@ -122,12 +124,35 @@ std::vector<ExtendedPoint> estimate_points_properties(const std::vector<P>      
         next_point.distance                = distance + boundary_offset;
         next_point.nearest_prev_layer_line = nearest_line;
 
-        if (ADD_INTERSECTIONS &&
-            ((points.back().distance > boundary_offset + EPSILON) != (next_point.distance > boundary_offset + EPSILON))) {
-            const ExtendedPoint &prev_point = points.back();
-            auto intersections = unscaled_prev_layer.template intersections_with_line<true>(L{prev_point.position.cast<AABBScalar>(), next_point.position.cast<AABBScalar>()});
-            for (const auto &intersection : intersections) {
-                points.emplace_back(intersection.first.template cast<double>(), boundary_offset, intersection.second);
+        if (ADD_INTERSECTIONS)
+        {
+            if (((points.back().distance > boundary_offset + EPSILON) != (next_point.distance > boundary_offset + EPSILON)))
+            {
+                const ExtendedPoint& prev_point = points.back();
+                auto intersections = unscaled_prev_layer.template intersections_with_line<true>(L{ prev_point.position.cast<AABBScalar>(), next_point.position.cast<AABBScalar>() });
+                for (const auto& intersection : intersections) {
+                    points.emplace_back(intersection.first.template cast<double>(), boundary_offset, intersection.second);
+                }
+            }
+            else
+            {
+                const ExtendedPoint& prev_point = points.back();
+                if ((prev_point.position - next_point.position).norm() > check_min_line_len)
+                {
+                    auto intersections = unscaled_prev_layer.template intersections_with_line<true>(L{ prev_point.position.cast<AABBScalar>(), next_point.position.cast<AABBScalar>() });
+                    for (int i = 0; i < intersections.size(); i += 2)
+                    {
+                        if (i + 1 > intersections.size() - 1)
+                            break;
+                        const auto& intersection_0 = intersections[i];
+                        const auto& intersection_1 = intersections[i + 1];
+                        if ((intersection_0.first - intersection_1.first).cast<double>().norm() > min_bridge_len)
+                        {
+                            points.emplace_back(intersection_0.first.template cast<double>(), boundary_offset, intersection_0.second);
+                            points.emplace_back(intersection_1.first.template cast<double>(), boundary_offset, intersection_1.second);
+                        }
+                    }
+                }
             }
         }
         points.push_back(next_point);
