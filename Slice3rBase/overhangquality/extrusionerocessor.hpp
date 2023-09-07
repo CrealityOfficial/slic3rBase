@@ -146,7 +146,7 @@ std::vector<ExtendedPoint> estimate_points_properties(const std::vector<P>      
                             break;
                         const auto& intersection_0 = intersections[i];
                         const auto& intersection_1 = intersections[i + 1];
-                        if ((intersection_0.first - intersection_1.first).cast<double>().norm() > min_bridge_len)
+                        if ((intersection_0.first - intersection_1.first).norm() > min_bridge_len)
                         {
                             points.emplace_back(intersection_0.first.template cast<double>(), boundary_offset, intersection_0.second);
                             points.emplace_back(intersection_1.first.template cast<double>(), boundary_offset, intersection_1.second);
