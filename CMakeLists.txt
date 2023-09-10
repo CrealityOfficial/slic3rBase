@@ -415,7 +415,7 @@ endif()
 
 set(EXPORT_INCLUDE ${CMAKE_CURRENT_SOURCE_DIR})
 
-__add_real_target(Slice3rBase lib SOURCE ${SRCS}
+__add_real_target(slice3r_base lib SOURCE ${SRCS}
 								LIB ${LIBS}
                                 ILIB ${ILIBS}
 								INC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${EXTRA_INCLUDES}
@@ -426,7 +426,7 @@ __add_real_target(Slice3rBase lib SOURCE ${SRCS}
 								)
 
 if(CC_INSTALL_SLICE3RBASE)
-	__install_directory_specif(${CMAKE_CURRENT_SOURCE_DIR}/ Slice3rBase)
+	__install_directory_specif(${CMAKE_CURRENT_SOURCE_DIR}/ slice3r_base)
 endif()
 
 
