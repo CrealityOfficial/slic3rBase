@@ -18,7 +18,7 @@ __assert_target(cereal)
 __assert_target(eigen)
 __assert_target(admesh)
 __assert_target(tbb)
-
+__enable_openmp()
 set(SRCS
 	#libslic3r_version.h
 	Slice3rBase/MultiPoint.cpp
